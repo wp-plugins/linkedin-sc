@@ -1,5 +1,5 @@
 === Plugin Name ===
-Contributors: Guillaume Viguier-Just
+Contributors: guillaumev
 Donate link: http://www.viguierjust.com
 Tags: linkedIn, resume, CV, curriculum, vitae
 Requires at least: 2.7
