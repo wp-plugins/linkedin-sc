@@ -24,6 +24,7 @@ add_shortcode('linkedinsc_status', 'linkedin_sc_status_handler');
 add_shortcode('linkedinsc_skills', 'linkedin_sc_skills_handler');
 add_shortcode('linkedinsc_interests', 'linkedin_sc_interests_handler');
 add_shortcode('linkedinsc_photo', 'linkedin_sc_photo_handler');
+add_shortcode('linkedinsc_summary', 'linkedin_sc_summary_handler');
 
 function linkedin_sc_firstname_handler($atts) {
 	global $linkedin_sc_profile;
@@ -58,4 +59,9 @@ function linkedin_sc_interests_handler($atts) {
 function linkedin_sc_photo_handler($atts) {
 	global $linkedin_sc_profile;
 	return _linkedin_sc_format_text($linkedin_sc_profile->photo);
+}
+
+function linkedin_sc_summary_handler($atts) {
+       global $linkedin_sc_profile;
+       return _linkedin_sc_format_text($linkedin_sc_profile->summary);
 }

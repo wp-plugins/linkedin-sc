@@ -21,6 +21,7 @@ add_shortcode('linkedinsc_exp', 'linkedin_sc_exp_handler');
 add_shortcode('linkedinsc_exp_title', 'linkedin_sc_exp_title_handler');
 add_shortcode('linkedinsc_org_link', 'linkedin_sc_org_link_handler');
 add_shortcode('linkedinsc_org_name', 'linkedin_sc_org_name_handler');
+add_shortcode('linkedinsc_org_full_link', 'linkedin_sc_org_full_link_handler');
 add_shortcode('linkedinsc_org_sector', 'linkedin_sc_org_sector_handler');
 add_shortcode('linkedinsc_exp_start', 'linkedin_sc_exp_start_handler');
 add_shortcode('linkedinsc_exp_end', 'linkedin_sc_exp_end_handler');
@@ -81,4 +82,13 @@ function linkedin_sc_exp_end_handler($atts) {
 function linkedin_sc_exp_description_handler($atts) {
 	$exp = _linkedin_sc_get_exp();
 	return _linkedin_sc_format_text($exp->description);
+}
+
+function linkedin_sc_org_full_link_handler($atts) {
+       $exp = _linkedin_sc_get_exp();
+       if($exp->organization->link == '') {
+              return _linkedin_sc_format_text($exp->organization->name);
+       } else {
+              return '<a href="'._linkedin_sc_format_text($exp->organization->link).'">'._linkedin_sc_format_text($exp->organization->name).'</a>';
+       }
 }

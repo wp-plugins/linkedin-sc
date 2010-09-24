@@ -4,7 +4,7 @@ Donate link: http://www.viguierjust.com
 Tags: linkedIn, resume, CV, curriculum, vitae
 Requires at least: 2.7
 Tested up to: 3.0.1
-Stable tag: 1.0
+Stable tag: 1.0.1
 
 Parses your linkedIn resume and allows you to display it using Shortcodes.
 
@@ -21,12 +21,14 @@ Here is a list of the shortcodes you can use:
 	<li>[linkedinsc_locality]: displays your current locality</li>
 	<li>[linkedinsc_status]: displays your current status</li>
 	<li>[linkedinsc_skills]: displays your skills</li>
+       <li>[linkedinsc_summary]: displays your summary</li>
 	<li>[linkedinsc_interests]: displays your interests</li>
 	<li>[linkedinsc_photo]: displays the link to your profile picture (to be included in the src attribute of an img tag)</li>
 	<li>[linkedinsc_exp]: each experience will be displayed according to the format given in the content of this shortcode</li>
 	<li>[linkedinsc_exp_title]: title of the experience</li>
 	<li>[linkedinsc_org_link]: link to the organization of the experience</li>
 	<li>[linkedinsc_org_name]: name of the organization</li>
+       <li>[linkedinsc_org_full_link]: will display a link to the organization if there is one, and only the name of the organization if the link is empty</li>
 	<li>[linkedinsc_org_sector]: sector of the organization</li>
 	<li>[linkedinsc_exp_start]: start date of the experience</li>
 	<li>[linkedinsc_exp_end]: end date of the experience</li>
@@ -85,6 +87,10 @@ Finally, note that you can set the format of the date in the plugin settings pag
 
 == Changelog ==
 
+= 1.0.1 =
+ * Added the [linkeinsc_org_full_link] shortcode
+ * Added the [linkedinsc_summary] shortcode
+
 = 1.0 =
-First version
+ * First version
 
