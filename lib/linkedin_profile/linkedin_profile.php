@@ -72,11 +72,11 @@ class LinkedInProfile {
 	 */
 	public $current_locality = '';
   
-       /**
-       * Summary
-       * @var string
-       */
-       public $summary = '';
+	/**
+	 * Summary
+	 * @var string
+	 */
+	public $summary = '';
 	
 	/**
 	 * Skills
@@ -160,9 +160,14 @@ class LinkedInProfile {
 				array('p', 'headline title summary', 'current_status'),
 				array('p', 'locality', 'current_locality'),
 				array('p', 'skills', 'skills'),
-                            array('p', 'summary', 'summary'),
+				array('p', 'summary', 'summary'),
 				array('p', 'interests', 'interests')
 			);
+			
+			// See http://wordpress.org/support/topic/plugin-linkedin-sc-missing-headline-title
+			if(empty($this->current_status)) {
+				$this->search_and_assign('p', 'headline title', 'current_status');
+			}
 			
 			foreach($elements as $element) {
 				$this->search_and_assign($element[0], $element[1], $element[2]);
