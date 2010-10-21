@@ -164,13 +164,13 @@ class LinkedInProfile {
 				array('p', 'interests', 'interests')
 			);
 			
+			foreach($elements as $element) {
+				$this->search_and_assign($element[0], $element[1], $element[2]);
+			}
+			
 			// See http://wordpress.org/support/topic/plugin-linkedin-sc-missing-headline-title
 			if(empty($this->current_status)) {
 				$this->search_and_assign('p', 'headline title', 'current_status');
-			}
-			
-			foreach($elements as $element) {
-				$this->search_and_assign($element[0], $element[1], $element[2]);
 			}
 			
 			// Get profile picture if any
