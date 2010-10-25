@@ -54,8 +54,10 @@ function _linkedin_sc_format_date($date) {
 }
 
 function _linkedin_sc_format_text($text) {
-	// Convert & to &amp; to validate XHTML
-	$out = htmlentities($text, ENT_COMPAT, 'UTF-8');
+	// Convert & to &amp; to validate XHTML and avoid XSS attacks
+	$out = htmlentities($text, ENT_QUOTES, 'UTF-8');
+	// Allow br tags
+	$out = str_replace('&lt;br /&gt;', '<br />', $out);
 	return nl2br(trim($out));
 }
 

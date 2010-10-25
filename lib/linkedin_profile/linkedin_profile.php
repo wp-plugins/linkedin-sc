@@ -130,9 +130,25 @@ class LinkedInProfile {
 	 */
 	protected function search_and_assign($element, $class, $name) {
 		foreach ($this->_xml->xpath('//'.$element.'[@class="'.$class.'"]') as $value) {
-			$this->$name = $value;
+			$this->$name = $this->subXML($value->asXML());
 		}
 	}
+	
+	/**
+	 * Getting $content of formatted expression
+	 * "<tag attributes>$content</tag>". Tag will
+	 * automatically determined.
+	 *
+	 * @return content of the tag
+	 */
+	protected function subXML($s){
+		// Position of the first enclosure >
+		$pos_first = strpos($s, '>');
+		// Position of the last opening <
+		$pos_last = strrpos($s, '<');
+		return substr($s, $pos_first + 1, $pos_last - $pos_first - 1);
+	}
+
 	
 	/**
 	 * Parses a linkedIn profile URL using SimpleXML
