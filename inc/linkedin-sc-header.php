@@ -53,7 +53,8 @@ function linkedin_sc_skills_handler($atts) {
 
 function linkedin_sc_interests_handler($atts) {
 	global $linkedin_sc_profile;
-	return _linkedin_sc_format_text($linkedin_sc_profile->interests);
+  // Converts line breaks to br because linkedIn does not do add br to this field
+	return nl2br(_linkedin_sc_format_text($linkedin_sc_profile->interests));
 }
 
 function linkedin_sc_photo_handler($atts) {

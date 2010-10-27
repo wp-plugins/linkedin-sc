@@ -216,7 +216,7 @@ class LinkedInProfile {
 					$exp->period->end = $end['title'];
 				}
 				foreach($experience->xpath('.//p[@class="description"]') as $description) {
-					$exp->description = $description;
+					$exp->description = $this->subXML($description->asXML());
 				}
 				$this->experiences[] = $exp;
 			}
@@ -239,7 +239,7 @@ class LinkedInProfile {
 					$ed->period->end = $end['title'];
 				}
 				foreach($education->xpath('.//p[@class="notes"]') as $notes) {
-					$ed->notes = $notes;
+					$ed->notes = $this->subXML($notes->asXML());
 				}
 				$this->education[] = $ed;
 			}

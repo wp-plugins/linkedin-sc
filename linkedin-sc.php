@@ -58,7 +58,7 @@ function _linkedin_sc_format_text($text) {
 	$out = htmlentities($text, ENT_QUOTES, 'UTF-8');
 	// Allow br tags
 	$out = str_replace('&lt;br /&gt;', '<br />', $out);
-	return nl2br(trim($out));
+	return trim($text);
 }
 
 require_once(dirname(__FILE__).'/inc/linkedin-sc-header.php');
