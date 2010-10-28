@@ -34,6 +34,8 @@ function linkedin_sc_exp_handler($atts, $content = null) {
 	global $linkedin_sc_exp_num;
 	$experiences = $linkedin_sc_profile->experiences;
 	$out = '';
+	// Making sure the counter is set to 0. See http://wordpress.org/support/topic/plugin-linkedin-sc-regarding-linkedin_sc_exp_num-and-linkedin_sc_edu_num
+	$linkedin_sc_exp_num = 0;
 	foreach($experiences as $experience) {
 		$out .= do_shortcode($content);
 		$linkedin_sc_exp_num++;
