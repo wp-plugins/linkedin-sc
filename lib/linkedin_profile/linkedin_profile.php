@@ -111,12 +111,20 @@ class LinkedInProfile {
 	/**
 	 * Constructor
 	 * 
-	 * @param string Name of the user whose profile is to be parsed
-	 * @param string Language
+	 * @param string Name of the user whose profile is to be parsed or full URL to user profile
+	 * @param string Language, set to en by default
 	 */
-	public function __construct($username, $language) {
-		$this->_username = $username;
-		$profile_url = $this->_url.$this->_username.'/'.$language;
+	public function __construct($username, $language = 'en') {
+		$profile_url = "";
+		if (strpos($username, "http://") !== FALSE) {
+			// Username is a URL
+			$profile_url = $username;
+			$profile_url = trim($profile_url, '/').'/'.$language;
+		}
+		else {
+			$this->_username = $username;
+			$profile_url = $this->_url.$this->_username.'/'.$language;
+		}
 		$this->_language = $language;
 		$this->parse($profile_url);
 	}
