@@ -4,7 +4,7 @@ Donate link: http://www.viguierjust.com
 Tags: linkedIn, resume, CV, curriculum, vitae
 Requires at least: 2.7
 Tested up to: 3.0.1
-Stable tag: 1.0.4
+Stable tag: 1.0.5
 
 Parses your linkedIn resume and allows you to display it using Shortcodes.
 
@@ -15,7 +15,7 @@ the display.
 
 Here is a list of the shortcodes you can use:
 <ul>
-	<li>[linkedinsc profile="guillaumev" lang="en"]: main shortcode, give here your profile name and the language you want your CV to be displayed in</li>
+	<li>[linkedinsc profile="guillaumev" lang="en"]: main shortcode, give here your profile name and the language you want your CV to be displayed in. Note that you can also use a full profile URL instead of your username</li>
 	<li>[linkedinsc_firstname]: displays your firstname</li>
 	<li>[linkedinsc_lastname]: displays your lastname</li>
 	<li>[linkedinsc_locality]: displays your current locality</li>
@@ -86,6 +86,9 @@ Finally, note that you can set the format of the date in the plugin settings pag
 3. Follow the instructions in the Description section
 
 == Changelog ==
+
+= 1.0.5 =
+ * Supporting all types of public profiles (see http://wordpress.org/support/topic/plugin-linkedin-sc-please-support-all-types-of-public-profiles)
 
 = 1.0.4 =
  * Fixing bug with Simple Facebook Connect module (see http://wordpress.org/support/topic/plugin-linkedin-sc-regarding-linkedin_sc_exp_num-and-linkedin_sc_edu_num)
