@@ -23,6 +23,7 @@ add_shortcode('linkedinsc_locality', 'linkedin_sc_locality_handler');
 add_shortcode('linkedinsc_status', 'linkedin_sc_status_handler');
 add_shortcode('linkedinsc_skills', 'linkedin_sc_skills_handler');
 add_shortcode('linkedinsc_interests', 'linkedin_sc_interests_handler');
+add_shortcode('linkedinsc_honors', 'linkedin_sc_honors_handler');
 add_shortcode('linkedinsc_photo', 'linkedin_sc_photo_handler');
 add_shortcode('linkedinsc_summary', 'linkedin_sc_summary_handler');
 
@@ -55,6 +56,11 @@ function linkedin_sc_interests_handler($atts) {
 	global $linkedin_sc_profile;
   // Converts line breaks to br because linkedIn does not do add br to this field
 	return nl2br(_linkedin_sc_format_text($linkedin_sc_profile->interests));
+}
+
+function linkedin_sc_honors_handler($atts) {
+	global $linkedin_sc_profile;
+	return _linkedin_sc_format_text($linkedin_sc_profile->honors);
 }
 
 function linkedin_sc_photo_handler($atts) {
