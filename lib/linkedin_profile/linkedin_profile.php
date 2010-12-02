@@ -192,7 +192,8 @@ class LinkedInProfile {
 				array('p', 'skills', 'skills'),
 				array('p', 'summary', 'summary'),
 				array('p', 'interests', 'interests'),
-				array('p', 'honors', 'honors')
+				array('p', 'honors', 'honors'),
+				array('p', 'groups', 'groups')
 			);
 			
 			foreach($elements as $element) {

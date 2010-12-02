@@ -26,6 +26,7 @@ add_shortcode('linkedinsc_interests', 'linkedin_sc_interests_handler');
 add_shortcode('linkedinsc_honors', 'linkedin_sc_honors_handler');
 add_shortcode('linkedinsc_photo', 'linkedin_sc_photo_handler');
 add_shortcode('linkedinsc_summary', 'linkedin_sc_summary_handler');
+add_shortcode('linkedinsc_groups', 'linkedin_sc_groups_handler');
 
 function linkedin_sc_firstname_handler($atts) {
 	global $linkedin_sc_profile;
@@ -71,4 +72,9 @@ function linkedin_sc_photo_handler($atts) {
 function linkedin_sc_summary_handler($atts) {
        global $linkedin_sc_profile;
        return _linkedin_sc_format_text($linkedin_sc_profile->summary);
+}
+
+function linkedin_sc_groups_handler($atts) {
+	global $linkedin_sc_profile;
+	return _linkedin_sc_format_text($linkedin_sc_profile->groups);
 }
