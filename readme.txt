@@ -4,7 +4,7 @@ Donate link: http://www.viguierjust.com
 Tags: linkedIn, resume, CV, curriculum, vitae
 Requires at least: 2.7
 Tested up to: 3.0.1
-Stable tag: 1.0.5
+Stable tag: 1.0.6
 
 Parses your linkedIn resume and allows you to display it using Shortcodes.
 
@@ -88,6 +88,10 @@ Finally, note that you can set the format of the date in the plugin settings pag
 3. Follow the instructions in the Description section
 
 == Changelog ==
+
+= 1.0.6 =
+ * Added [linkedinsc_honors] shortcode
+ * Added [linkedinsc_groups] shortcode
 
 = 1.0.5 =
  * Supporting all types of public profiles (see http://wordpress.org/support/topic/plugin-linkedin-sc-please-support-all-types-of-public-profiles)
