@@ -1,30 +1,34 @@
-# Translation of the WordPress plugin LinkedIn SC 1.0 by Guillaume Viguier-Just.
-# Copyright (C) 2010 Guillaume Viguier-Just
+# Copyright (C) 2010 LinkedIn SC
 # This file is distributed under the same license as the LinkedIn SC package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
-#
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: LinkedIn SC 1.0\n"
+"Project-Id-Version: LinkedIn SC 1.0.6\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/linkedin-sc\n"
-"POT-Creation-Date: 2010-08-24 23:34-0500\n"
+"POT-Creation-Date: 2011-02-05 11:30:11+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "PO-Revision-Date: 2010-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: 8bit\n"
 
-#: linkedin-sc.php:81
+#: linkedin-sc.php:118
 msgid "You do not have sufficient permissions to access this page."
 msgstr ""
 
-#: linkedin-sc.php:90
+#: linkedin-sc.php:127
 msgid "Date format"
 msgstr ""
 
-#: linkedin-sc.php:95
+#: linkedin-sc.php:131
+msgid "LinkedIn API key"
+msgstr ""
+
+#: linkedin-sc.php:135
+msgid "LinkedIn secret key"
+msgstr ""
+
+#: linkedin-sc.php:140
 msgid "Save Changes"
 msgstr ""
 
@@ -32,9 +36,9 @@ msgstr ""
 msgid "LinkedIn SC"
 msgstr ""
 
-#. #-#-#-#-#  linkedin-sc.pot (LinkedIn SC 1.0)  #-#-#-#-#
+#. #-#-#-#-#  plugin.pot (LinkedIn SC 1.0.6)  #-#-#-#-#
 #. Plugin URI of the plugin/theme
-#. #-#-#-#-#  linkedin-sc.pot (LinkedIn SC 1.0)  #-#-#-#-#
+#. #-#-#-#-#  plugin.pot (LinkedIn SC 1.0.6)  #-#-#-#-#
 #. Author URI of the plugin/theme
 msgid "http://www.viguierjust.com"
 msgstr ""
