@@ -16,28 +16,42 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
-add_shortcode('linkedinsc_edu', 'linkedin_sc_edu_handler');
-add_shortcode('linkedinsc_edu_title', 'linkedin_sc_edu_title_handler');
-add_shortcode('linkedinsc_edu_degree', 'linkedin_sc_edu_degree_handler');
-add_shortcode('linkedinsc_edu_major', 'linkedin_sc_edu_major_handler');
-add_shortcode('linkedinsc_edu_start', 'linkedin_sc_edu_start_handler');
-add_shortcode('linkedinsc_edu_end', 'linkedin_sc_edu_end_handler');
-add_shortcode('linkedinsc_edu_notes', 'linkedin_sc_edu_notes_handler');
+
+/**
+ * These shortcodes are now deprecated but are left (for now) for compatibility reasons
+ */
+add_shortcode('linkedinsc_edu', 'linkedin_sc_educations_handler');
+add_shortcode('linkedinsc_edu_title', 'linkedin_sc_education_school_name_handler');
+add_shortcode('linkedinsc_edu_degree', 'linkedin_sc_education_degree_handler');
+add_shortcode('linkedinsc_edu_major', 'linkedin_sc_education_field_of_study_handler');
+add_shortcode('linkedinsc_edu_start', 'linkedin_sc_education_start_date_handler');
+add_shortcode('linkedinsc_edu_end', 'linkedin_sc_education_end_date_handler');
+add_shortcode('linkedinsc_edu_notes', 'linkedin_sc_education_notes_handler');
+
+/**
+ * The following shortcodes should be used
+ */
+add_shortcode('linkedinsc_educations', 'linkedin_sc_educations_handler');
+add_shortcode('linkedinsc_education_school_name', 'linkedin_sc_education_school_name_handler');
+add_shortcode('linkedinsc_education_degree', 'linkedin_sc_education_degree_handler');
+add_shortcode('linkedinsc_education_field_of_study', 'linkedin_sc_education_field_of_study_handler');
+add_shortcode('linkedinsc_education_start_date', 'linkedin_sc_education_start_date_handler');
+add_shortcode('linkedinsc_education_end_date', 'linkedin_sc_education_end_date_handler');
+add_shortcode('linkedinsc_education_notes', 'linkedin_sc_education_notes_handler');
 
 $linkedin_sc_edu_num = 0;
 
 function _linkedin_sc_get_edu() {
 	global $linkedin_sc_profile;
 	global $linkedin_sc_edu_num;
-	$educations = $linkedin_sc_profile->education;
+	$educations = $linkedin_sc_profile->educations;
 	return $educations[$linkedin_sc_edu_num];
 }
 
-function linkedin_sc_edu_handler($atts, $content = null) {
+function linkedin_sc_educations_handler($atts, $content = null) {
 	global $linkedin_sc_profile;
 	global $linkedin_sc_edu_num;
-	$educations = $linkedin_sc_profile->education;
+	$educations = $linkedin_sc_profile->educations;
 	$out = '';
 	// Making sure the counter is set to 0. See http://wordpress.org/support/topic/plugin-linkedin-sc-regarding-linkedin_sc_exp_num-and-linkedin_sc_edu_num
 	$linkedin_sc_edu_num = 0;
@@ -48,32 +62,32 @@ function linkedin_sc_edu_handler($atts, $content = null) {
 	return $out;
 }
 
-function linkedin_sc_edu_title_handler($atts) {
+function linkedin_sc_education_school_name_handler($atts) {
 	$edu = _linkedin_sc_get_edu();
-	return _linkedin_sc_format_text($edu->title);
+	return _linkedin_sc_format_text($edu->school_name);
 }
 
-function linkedin_sc_edu_degree_handler($atts) {
+function linkedin_sc_education_degree_handler($atts) {
 	$edu = _linkedin_sc_get_edu();
 	return _linkedin_sc_format_text($edu->degree);
 }
 
-function linkedin_sc_edu_major_handler($atts) {
+function linkedin_sc_education_field_of_study_handler($atts) {
 	$edu = _linkedin_sc_get_edu();
-	return _linkedin_sc_format_text($edu->major);
+	return _linkedin_sc_format_text($edu->field_of_study);
 }
 
-function linkedin_sc_edu_start_handler($atts) {
+function linkedin_sc_education_start_date_handler($atts) {
 	$edu = _linkedin_sc_get_edu();
-	return _linkedin_sc_format_date($edu->period->start);
+	return _linkedin_sc_format_date($edu->start_date);
 }
 
-function linkedin_sc_edu_end_handler($atts) {
+function linkedin_sc_education_end_date_handler($atts) {
 	$edu = _linkedin_sc_get_edu();
-	return _linkedin_sc_format_date($edu->period->end);
+	return _linkedin_sc_format_date($edu->end_date);
 }
 
-function linkedin_sc_edu_notes_handler($atts) {
+function linkedin_sc_education_notes_handler($atts) {
 	$edu = _linkedin_sc_get_edu();
 	return _linkedin_sc_format_text($edu->notes);
 }

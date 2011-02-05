@@ -31,6 +31,14 @@ Licence: GPL3
 $plugin_dir = basename(dirname(__FILE__));
 load_plugin_textdomain('linkedin_sc', null, $plugin_dir.'/languages');
 
+/** Whether to use LinkedIn API **/
+$linkedin_sc_use_api = FALSE;
+$linkedin_sc_api_key = get_option('linkedin_sc_api_key');
+$linkedin_sc_secret_key = get_option('linkedin_sc_secret_key');
+if (!empty($linkedin_sc_api_key) && !empty($linkedin_sc_secret_key)) {
+	$linkedin_sc_use_api = TRUE;
+}
+
 /** Shortcodes **/
 define('LINKEDIN_SC_PATH', WP_PLUGIN_URL.'/linkedin-sc/');
 add_shortcode('linkedinsc', 'linkedin_sc_handler');
@@ -39,8 +47,30 @@ $linkedin_sc_profile = null;
 
 function linkedin_sc_handler($atts, $content = null) {
 	global $linkedin_sc_profile;
-	require_once(dirname(__FILE__).'/lib/linkedin_profile/linkedin_profile.php');
-	$linkedin_sc_profile = new LinkedInProfile($atts['profile'], $atts['lang']);
+	global $linkedin_sc_use_api;
+	global $current_user;
+	if ($linkedin_sc_use_api && linkedin_sc_api_authorized()) {
+		// Add required shortcodes
+		require_once(dirname(__FILE__).'/inc/linkedin-sc-certifications.php');
+		require_once(dirname(__FILE__).'/inc/linkedin-sc-languages.php');
+		require_once(dirname(__FILE__).'/inc/linkedin-sc-patents.php');
+		require_once(dirname(__FILE__).'/inc/linkedin-sc-publications.php');
+		require_once(dirname(__FILE__).'/inc/linkedin-sc-skills.php');
+		// We can use linkedin API
+		require_once(dirname(__FILE__).'/lib/linkedin_profile/linkedin_api_profile.php');
+		$cache = get_user_meta($current_user->ID, 'linkedin_sc_cache', TRUE);
+		if ($cache) {
+			$linkedin_sc_profile = new LinkedInAPIProfile($cache, 'en', NULL, TRUE);
+		}
+		else {
+			$access = linkedin_sc_api_get_tokens();
+			$linkedin_sc_profile = new LinkedInAPIProfile($access['oauth_token'], $atts['lang']);
+		}
+	}
+	else {
+		require_once(dirname(__FILE__).'/lib/linkedin_profile/linkedin_public_profile.php');
+		$linkedin_sc_profile = new LinkedInPublicProfile($atts['profile'], $atts['lang']);
+	}
 	return do_shortcode($content);
 }
 
@@ -64,6 +94,9 @@ function _linkedin_sc_format_text($text) {
 require_once(dirname(__FILE__).'/inc/linkedin-sc-header.php');
 require_once(dirname(__FILE__).'/inc/linkedin-sc-experiences.php');
 require_once(dirname(__FILE__).'/inc/linkedin-sc-education.php');
+if ($linkedin_sc_use_api) {
+	require_once(dirname(__FILE__).'/inc/linkedin-sc-api.php');
+}
 
 
 /** Admin **/
@@ -76,6 +109,8 @@ function linkedin_sc_menu() {
 
 function linkedin_sc_register_settings() {
 	register_setting('linkedin_sc_settings', 'linkedin_sc_date_format');
+	register_setting('linkedin_sc_settings', 'linkedin_sc_api_key');
+	register_setting('linkedin_sc_settings', 'linkedin_sc_secret_key');
 }
 
 function linkedin_sc_options() {
@@ -90,7 +125,15 @@ function linkedin_sc_options() {
 		<table class="form-table">
 			<tr valign="top">
 				<th scope="row"><?php _e('Date format') ?></th>
-				<td><input type="text" name="linkedin_sc_date_format" value="<?php echo get_option('linkedin_sc_date_format') ?>" /></td>
+				<td><input type="text" name="linkedin_sc_date_format" value="<?php echo get_option('linkedin_sc_date_format', 'M Y') ?>" /></td>
+			</tr>
+			<tr valign="top">
+				<th scope="row"><?php _e('LinkedIn API key') ?></th>
+				<td><input type="text" name="linkedin_sc_api_key" value="<?php echo get_option('linkedin_sc_api_key') ?>" /></td>
+			</tr>
+			<tr valign="top">
+				<th scope="row"><?php _e('LinkedIn secret key') ?></th>
+				<td><input type="text" name="linkedin_sc_secret_key" value="<?php echo get_option('linkedin_sc_secret_key') ?>" /></td>
 			</tr>
 		</table>
 		<p class="submit">
@@ -101,3 +144,57 @@ function linkedin_sc_options() {
 <?php
 }
 
+/** User profile **/
+// Add these actions on user profile only if an API and secret keys were registered
+if ($linkedin_sc_use_api) {
+	
+function linkedin_sc_api_init() {
+	wp_register_script('linkedin_sc', plugins_url('js/linkedin_sc.js', __FILE__));
+	wp_enqueue_script('linkedin_sc');
+}
+
+add_action('init', 'linkedin_sc_api_init');
+add_action('wp_ajax_linkedin_sc_api_oauth', 'linkedin_sc_api_oauth');
+function linkedin_sc_api_oauth() {
+	global $current_user;
+	$oauth_token = $_POST['oauth_token'];
+	update_user_meta($current_user->ID, 'linkedin_sc_oauth_token', $oauth_token);
+	update_user_meta($current_user->ID, 'linkedin_sc_api_authorized', '1');
+	// Normally, the oauth bearer token used should be updated
+	// using the method described here:
+	// http://developer.linkedin.com/message/6708
+	// However, for now, there is no documentation on how to update
+	// the oauth token. In the meantime, I'm storing the XML response in a user
+	// option.
+	require_once(dirname(__FILE__).'/lib/linkedin_profile/linkedin_api_profile.php');
+	$linkedin_sc_profile = new LinkedInAPIProfile($oauth_token, 'en');
+	// Store response in a cache
+	update_user_meta($current_user->ID, 'linkedin_sc_cache', $linkedin_sc_profile->getResponse());
+	die();
+}
+
+add_action('profile_personal_options', 'linkedin_sc_user_profile');
+
+function linkedin_sc_user_profile($user) {
+	$authorized = linkedin_sc_api_authorized();
+	$api_config = linkedin_sc_api_get_config();
+?>
+	<script type="text/javascript" src="http://platform.linkedin.com/in.js">
+    api_key: <?php echo $api_config['appKey']."\n"; ?>
+    authorize: true
+  </script>
+	<table class="form-table">
+		<tr>
+			<th><label>LinkedIn API</label></th>
+			<td><script type="in/login" data-onAuth="onLinkedInAuth"></script><div id="linkedin_sc_profile"></div></td>
+		</tr>
+
+	</table>
+
+
+<?php
+}
+
+
+}
+?>
