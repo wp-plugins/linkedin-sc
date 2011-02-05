@@ -133,7 +133,7 @@ Finally, note that you can set the format of the date in the plugin settings pag
 
 **If you are using the LinkedIn API, in order to be fully secure, you NEED to use SSL for your admin backend. Set FORCE_SSL_ADMIN to true in your configuration: http://codex.wordpress.org/Administration_Over_SSL**
 
-This plugin was sponsored by the <a href="http://www.dogoodfoundation.com">DoGood foundation</a>.
+This plugin was sponsored by <a href="http://www.csrjobs.nl">CSRJobs</a>.
 
 == Installation ==
 
