@@ -130,6 +130,7 @@ Here is an example of how you could format your CV using those shortcodes:
 Finally, note that you can set the format of the date in the plugin settings page.
 
 **The LinkedIn API part is for now considered as experimental and will only parse english profiles**
+
 **If you are using the LinkedIn API, in order to be fully secure, you NEED to use SSL for your admin backend. Set FORCE_SSL_ADMIN to true in your configuration: http://codex.wordpress.org/Administration_Over_SSL**
 
 This plugin was sponsored by the <a href="http://www.dogoodfoundation.com">DoGood foundation</a>.
@@ -142,7 +143,7 @@ This plugin was sponsored by the <a href="http://www.dogoodfoundation.com">DoGoo
 
 == Changelog ==
 
-= 1.1 =
+= 1.1.0 =
  * Major changes
  * It is now possible to parse private fields using LinkedIn API
  * Various shortcodes added (see full list in plugin's instructions)
@@ -174,6 +175,6 @@ This plugin was sponsored by the <a href="http://www.dogoodfoundation.com">DoGoo
 
 == Upgrade Notice ==
 
-= 1.1 =
+= 1.1.0 =
 Please note that older shortcodes are now deprecated. They have been left in the plugin for compatibility reasons but will be removed in the future. Think about updating your shortcodes ! The 
 full list of the new shortcodes is available on the plugin description page.
