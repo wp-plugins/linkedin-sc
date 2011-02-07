@@ -26,13 +26,13 @@ function linkedin_sc_api_get_config() {
 }
 
 function linkedin_sc_api_get_tokens() {
-  global $current_user;
+  $user_id = linkedin_sc_get_post_author();
   
   $access = array();
-  $access['oauth_token'] = get_user_meta($current_user->ID, 'linkedin_sc_oauth_token', TRUE);
-  $access['oauth_token_secret'] = get_user_meta($current_user->ID, 'linkedin_sc_oauth_token_secret', TRUE);
-  $access['oauth_expires_in'] = get_user_meta($current_user->ID, 'linkedin_sc_oauth_expires_in', TRUE);
-  $access['oauth_authorization_expires_in'] = get_user_meta($current_user->ID, 'linkedin_sc_oauth_authorization_expires_in', TRUE);
+  $access['oauth_token'] = get_user_meta($user_id, 'linkedin_sc_oauth_token', TRUE);
+  $access['oauth_token_secret'] = get_user_meta($user_id, 'linkedin_sc_oauth_token_secret', TRUE);
+  $access['oauth_expires_in'] = get_user_meta($user_id, 'linkedin_sc_oauth_expires_in', TRUE);
+  $access['oauth_authorization_expires_in'] = get_user_meta($user_id, 'linkedin_sc_oauth_authorization_expires_in', TRUE);
   
   return $access;
 }
@@ -48,8 +48,19 @@ function linkedin_sc_api_save_tokens($access) {
 }
 
 function linkedin_sc_api_authorized() {
-  global $current_user;
-  $authorized = get_user_meta($current_user->ID, 'linkedin_sc_api_authorized', TRUE);
+  $user_id = linkedin_sc_get_post_author();
+  $authorized = get_user_meta($user_id, 'linkedin_sc_api_authorized', TRUE);
   return $authorized == 1;
 }
 
+function linkedin_sc_get_post_author() {
+  global $post;
+  global $current_user;
+  
+  if ($post) {
+    return $post->post_author;
+  }
+  else {
+    return $current_user->ID;
+  }
+}

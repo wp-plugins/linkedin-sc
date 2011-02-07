@@ -48,7 +48,7 @@ $linkedin_sc_profile = null;
 function linkedin_sc_handler($atts, $content = null) {
 	global $linkedin_sc_profile;
 	global $linkedin_sc_use_api;
-	global $current_user;
+	global $post;
 	if ($linkedin_sc_use_api && linkedin_sc_api_authorized()) {
 		// Add required shortcodes
 		require_once(dirname(__FILE__).'/inc/linkedin-sc-certifications.php');
@@ -58,7 +58,7 @@ function linkedin_sc_handler($atts, $content = null) {
 		require_once(dirname(__FILE__).'/inc/linkedin-sc-skills.php');
 		// We can use linkedin API
 		require_once(dirname(__FILE__).'/lib/linkedin_profile/linkedin_api_profile.php');
-		$cache = get_user_meta($current_user->ID, 'linkedin_sc_cache', TRUE);
+		$cache = get_user_meta($post->post_author, 'linkedin_sc_cache', TRUE);
 		if ($cache) {
 			$linkedin_sc_profile = new LinkedInAPIProfile($cache, 'en', NULL, TRUE);
 		}
@@ -176,7 +176,6 @@ function linkedin_sc_api_oauth() {
 add_action('profile_personal_options', 'linkedin_sc_user_profile');
 
 function linkedin_sc_user_profile($user) {
-	$authorized = linkedin_sc_api_authorized();
 	$api_config = linkedin_sc_api_get_config();
 ?>
 	<script type="text/javascript" src="http://platform.linkedin.com/in.js">
