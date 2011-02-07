@@ -15,7 +15,6 @@
  */
 
 require_once(dirname(__FILE__).'/linkedin_profile.php');
-require_once(dirname(__FILE__).'/linkedin_3.0.1.class.php');
 
 /**
  * LinkedIn API profile
