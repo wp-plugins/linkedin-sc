@@ -153,7 +153,7 @@ class LinkedInAPIProfile extends LinkedInProfile {
    * Builds the url with the OAuth token and the fields to retrieve
    */
   protected function build_url($oauth_token) {
-    $url = $this::profile_url;
+    $url = LinkedInAPIProfile::profile_url;
     $fields = implode(',', $this->_fields);
     $fields = '~:('.$fields.')';
     $url .= $fields.'?oauth_token='.$oauth_token;
