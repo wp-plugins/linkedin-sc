@@ -115,6 +115,7 @@ class LinkedInPublicProfile extends LinkedInProfile {
 		);
 		$context = stream_context_create($opts);
 		$html_string = file_get_contents($profile_url, false, $context);
+		file_put_contents('/tmp/linkedin', $html_string);
 		$this->_response = $html_string;
 		// Import the HTML into DOM before giving it to simpleXML
 		$doc = new DOMDocument('1.0');
@@ -124,13 +125,13 @@ class LinkedInPublicProfile extends LinkedInProfile {
 			$elements = array(
 				array('span', 'given-name', 'first_name'),
 				array('span', 'family-name', 'last_name'),
-				array('p', 'headline title summary', 'headline'),
-				array('p', 'locality', 'location'),
-				array('p', 'skills', 'specialties'),
-				array('p', 'summary', 'summary'),
-				array('p', 'interests', 'interests'),
-				array('p', 'honors', 'honors'),
-				array('p', 'groups', 'groups')
+				array('p', 'title', 'headline'),
+				array('dd', 'locality', 'location'),
+				array('p', 'null', 'specialties'),
+				//array('p', 'summary', 'summary'),
+				array('p', '', 'interests'),
+				//array('p', " ''", 'honors'),
+				//array('p', 'groups', 'groups')
 			);
 			
 			foreach($elements as $element) {
@@ -154,53 +155,71 @@ class LinkedInPublicProfile extends LinkedInProfile {
 			
 			// Get positions
 			$this->positions = array();
-			foreach($this->_xml->xpath('//li[@class="experience vevent vcard"]') as $experience) {
-				$exp = new stdClass();
-				$exp->title = trim($experience->h3);
-				$exp->company = new stdClass();
-				if($experience->h4->a) {
-					$exp->company->name = trim($experience->h4->a);
-					$exp->company->link = $experience->h4->a['href'];
-				} else {
-					$exp->company->name = trim($experience->h4);
-				}
-				foreach($experience->xpath('.//p[@class="organization-details"]') as $sector) {
-					$exp->company->industry = trim(strtr($sector, '()', '  '));
-				}
-				foreach($experience->xpath('.//abbr[@class="dtstart"]') as $start) {
-					$exp->start_date = $start['title'];
-				}
-				foreach($experience->xpath('.//abbr[@class="dtend"]') as $end) {
-					$exp->end_date = $end['title'];
-				}
-				foreach($experience->xpath('.//p[@class="description"]') as $description) {
-					$exp->summary = $this->subXML($description->asXML());
-				}
+			foreach($this->_xml->xpath('//div[@class="position  first experience vevent vcard current-position"]') as $experience) {
+				$exp = $this->fill_position($experience);
+				$this->positions[] = $exp;
+			}
+			foreach($this->_xml->xpath('//div[@class="position   experience vevent vcard past-position"]') as $experience) {
+				$exp = $this->fill_position($experience);
 				$this->positions[] = $exp;
 			}
 			
 			// Get education
 			$this->educations = array();
-			foreach($this->_xml->xpath('//li[@class="education vevent vcard"]') as $education) {
-				$ed = new stdClass();
-				$ed->school_name = trim($education->h3);
-				foreach($education->xpath('.//span[@class="degree"]') as $degree) {
-					$ed->degree = $degree;
-				}
-				foreach($education->xpath('.//span[@class="major"]') as $major) {
-					$ed->field_of_study = $major;
-				}
-				foreach($education->xpath('.//abbr[@class="dtstart"]') as $start) {
-					$ed->start_date = $start['title'];
-				}
-				foreach($education->xpath('.//abbr[@class="dtend"]') as $end) {
-					$ed->end_date = $end['title'];
-				}
-				foreach($education->xpath('.//p[@class="notes"]') as $notes) {
-					$ed->notes = $this->subXML($notes->asXML());
-				}
+			foreach($this->_xml->xpath('//div[@class="position  first education vevent vcard"]') as $education) {
+				$ed = $this->fill_education($education);
+				$this->educations[] = $ed;
+			}
+			foreach($this->_xml->xpath('//div[@class="position  education vevent vcard"]') as $education) {
+				$ed = $this->fill_education($education);
 				$this->educations[] = $ed;
 			}
 		}
+	}
+	
+	private function fill_position($experience) {
+		$exp = new stdClass();
+		$exp->title = trim($experience->div->h3->span);
+		$exp->company = new stdClass();
+		if($experience->div->h4->strong->a) {
+			$exp->company->name = trim($experience->div->h4->strong->a->span);
+			$exp->company->link = $experience->div->h4->strong->a['href'];
+		} else {
+			$exp->company->name = trim($experience->div->h4->strong->span);
+		}
+		foreach($experience->xpath('.//p[@class="orgstats organization-details"]') as $sector) {
+			$exp->company->industry = trim(strtr($sector, '()', '  '));
+		}
+		foreach($experience->xpath('.//abbr[@class="dtstart"]') as $start) {
+			$exp->start_date = $start['title'];
+		}
+		foreach($experience->xpath('.//abbr[@class="dtend"]') as $end) {
+			$exp->end_date = $end['title'];
+		}
+		foreach($experience->xpath('.//p[@class=" desc"]') as $description) {
+			$exp->summary = $this->subXML($description->asXML());
+		}
+		return $exp;
+	}
+	
+	private function fill_education($education) {
+		$ed = new stdClass();
+		$ed->school_name = trim($education->h3);
+		foreach($education->xpath('.//span[@class="degree"]') as $degree) {
+			$ed->degree = $degree;
+		}
+		foreach($education->xpath('.//span[@class="major"]') as $major) {
+			$ed->field_of_study = $major;
+		}
+		foreach($education->xpath('.//abbr[@class="dtstart"]') as $start) {
+			$ed->start_date = $start['title'];
+		}
+		foreach($education->xpath('.//abbr[@class="dtend"]') as $end) {
+			$ed->end_date = $end['title'];
+		}
+		foreach($education->xpath('.//p[@class=" desc"]') as $notes) {
+			$ed->notes = $this->subXML($notes->asXML());
+		}
+		return $ed;
 	}
 }
