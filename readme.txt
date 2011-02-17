@@ -1,4 +1,4 @@
-=== Plugin Name ===
+=== LinkedIn SC ===
 Contributors: guillaumev
 Donate link: http://www.viguierjust.com
 Tags: linkedIn, resume, CV, curriculum, vitae
