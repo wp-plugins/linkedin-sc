@@ -3,8 +3,8 @@ Contributors: guillaumev
 Donate link: http://www.viguierjust.com
 Tags: linkedIn, resume, CV, curriculum, vitae
 Requires at least: 2.7
-Tested up to: 3.0.1
-Stable tag: 1.1.1
+Tested up to: 3.0.5
+Stable tag: 1.1.2
 
 Parses your linkedIn resume and allows you to display it using Shortcodes.
 
@@ -129,9 +129,9 @@ Here is an example of how you could format your CV using those shortcodes:
 
 Finally, note that you can set the format of the date in the plugin settings page.
 
-**The LinkedIn API part is for now considered as experimental and will only parse english profiles**
+**The LinkedIn API part is for now considered as experimental**
 
-**If you are using the LinkedIn API, in order to be fully secure, you NEED to use SSL for your admin backend. Set FORCE_SSL_ADMIN to true in your configuration: http://codex.wordpress.org/Administration_Over_SSL**
+**In order to use LinkedIn API, you NEED to have SSL enabled for your admin backend. Set FORCE_SSL_ADMIN to true in your configuration: http://codex.wordpress.org/Administration_Over_SSL**
 
 This plugin was sponsored by <a href="http://www.csrjobs.nl">CSRJobs</a>.
 
@@ -140,9 +140,15 @@ This plugin was sponsored by <a href="http://www.csrjobs.nl">CSRJobs</a>.
 1. Download it
 2. Install it
 3. Follow the instructions in the Description section
+4. A detailed configuration process to use LinkedIn API is available here: http://www.viguierjust.com/en/2011/02/07/using-linkedin-sc-with-linkedin-api/
 
 == Changelog ==
 
+= 1.1.2 =
+ * Fixed T_PAAMAYIM_NEKUDOTAYIM bug
+ * Implemented LinkedIn exchange API: http://developer.linkedin.com/docs/DOC-1252
+ * You can now parse any profile (including non-english profiles) using LinkedIn API
+ 
 = 1.1.1 =
  * Fixed critical bug for use with LinkedIn API
 

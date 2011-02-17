@@ -4,7 +4,7 @@
 Plugin Name: LinkedIn SC
 Plugin URI: http://www.viguierjust.com
 Description: Display your LinkedIn CV on one of your Wordpress pages or post using Shortcodes
-Version: 1.1.1
+Version: 1.1.2
 Author: Guillaume Viguier-Just
 Author URI: http://www.viguierjust.com
 Licence: GPL3
@@ -58,14 +58,14 @@ function linkedin_sc_handler($atts, $content = null) {
 		require_once(dirname(__FILE__).'/inc/linkedin-sc-skills.php');
 		// We can use linkedin API
 		require_once(dirname(__FILE__).'/lib/linkedin_profile/linkedin_api_profile.php');
-		$cache = get_user_meta($post->post_author, 'linkedin_sc_cache', TRUE);
+		/*$cache = get_user_meta($post->post_author, 'linkedin_sc_cache', TRUE);
 		if ($cache) {
 			$linkedin_sc_profile = new LinkedInAPIProfile($cache, 'en', NULL, TRUE);
 		}
-		else {
-			$access = linkedin_sc_api_get_tokens();
-			$linkedin_sc_profile = new LinkedInAPIProfile($access['oauth_token'], $atts['lang']);
-		}
+		else {*/
+			$oauth_config = linkedin_sc_api_get_config();
+			$linkedin_sc_profile = new LinkedInAPIProfile($oauth_config, $atts['lang']);
+		//}
 	}
 	else {
 		require_once(dirname(__FILE__).'/lib/linkedin_profile/linkedin_public_profile.php');
@@ -156,20 +156,20 @@ function linkedin_sc_api_init() {
 add_action('init', 'linkedin_sc_api_init');
 add_action('wp_ajax_linkedin_sc_api_oauth', 'linkedin_sc_api_oauth');
 function linkedin_sc_api_oauth() {
-	global $current_user;
-	$oauth_token = $_POST['oauth_token'];
-	update_user_meta($current_user->ID, 'linkedin_sc_oauth_token', $oauth_token);
-	update_user_meta($current_user->ID, 'linkedin_sc_api_authorized', '1');
-	// Normally, the oauth bearer token used should be updated
-	// using the method described here:
-	// http://developer.linkedin.com/message/6708
-	// However, for now, there is no documentation on how to update
-	// the oauth token. In the meantime, I'm storing the XML response in a user
-	// option.
-	require_once(dirname(__FILE__).'/lib/linkedin_profile/linkedin_api_profile.php');
-	$linkedin_sc_profile = new LinkedInAPIProfile($oauth_token, 'en');
-	// Store response in a cache
-	update_user_meta($current_user->ID, 'linkedin_sc_cache', $linkedin_sc_profile->getResponse());
+	global $linkedin_sc_api_key;
+	// Read cookie and save it in tmp file
+	$cookie_name = "linkedin_oauth_${linkedin_sc_api_key}";
+	// This stripslashes shouldn't be here, but for some reason the cookie arrives with 
+	// slashes in front of the apostrophes
+	$credentials_json = stripslashes($_COOKIE[$cookie_name]);
+	$credentials = json_decode($credentials_json);
+	// Verify signature
+	if (linkedin_sc_api_validate_signature($credentials)) {
+		// Exchange tokens
+		$response = linkedin_sc_api_exchange_token($credentials->access_token);
+		// Save tokens
+		linkedin_sc_api_save_tokens($response);
+	}
 	die();
 }
 
@@ -179,8 +179,8 @@ function linkedin_sc_user_profile($user) {
 	$api_config = linkedin_sc_api_get_config();
 ?>
 	<script type="text/javascript" src="http://platform.linkedin.com/in.js">
-    api_key: <?php echo $api_config['appKey']."\n"; ?>
-    authorize: true
+    api_key: <?php echo $api_config['consumer_key']."\n"; ?>
+    credentials_cookie: true
   </script>
 	<table class="form-table">
 		<tr>

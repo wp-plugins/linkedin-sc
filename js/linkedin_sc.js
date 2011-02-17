@@ -1,21 +1,14 @@
 // Once we have an authorization, fetch the user's profile via API
 function onLinkedInAuth() {
-  // Post Oauth token to the server
-  // @todo Token should be posted securely !!!!
-  // Determining oauth token
-  // See http://developer.linkedin.com/thread/2366
-  var oauth_token = '';
-  if (IN.ENV.auth.oauth_token) {
-    oauth_token = IN.ENV.auth.oauth_token;
-  }
-  else {
-    oauth_token = IN.ENV.auth.access_token;
-  }
+  // Ask server to read OAuth token
+  // See http://developer.linkedin.com/docs/DOC-1252
   var data = {
     action: 'linkedin_sc_api_oauth',
-    oauth_token: oauth_token
   }
-  jQuery.post(ajaxurl, data);
+  // Using this until the race condition is solved
+  window.setTimeout(function() {
+                        jQuery.post(ajaxurl, data);
+                    }, 1000);
   IN.API.Profile("me")
     .result( function(r) {setProfile(r);} )
     .error( function(e) {alert("something broke " + e);} );

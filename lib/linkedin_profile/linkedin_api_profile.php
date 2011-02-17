@@ -79,21 +79,33 @@ class LinkedInAPIProfile extends LinkedInProfile {
 	/**
 	 * Constructor
 	 * 
-   * @param string OAuth 2 bearer token
+   * @param array OAuth 1.0a configuration
    * @param array List of fields to retrieve
 	 */
-	public function __construct($oauth_token, $language = 'en', $fields = NULL, $build_from_cache = FALSE) {
+	public function __construct($oauth_config, $language = 'en', $fields = NULL, $build_from_cache = FALSE) {
     if ($build_from_cache == FALSE) {
       if ($fields != NULL) {
         $this->_fields = $fields;
       }
-      $url = $this->build_url($oauth_token);
-      $locale = $this->convert_locale($language);
-      $response = $this->fetch($url, $locale);
-      $this->_response = $response;
+      if (extension_loaded('oauth')) {
+        $oauth = new OAuth($oauth_config['consumer_key'], $oauth_config['consumer_secret']);
+        $oauth->setToken($oauth_config['oauth_token'], $oauth_config['oauth_token_secret']);
+        $language = $this->convert_locale($language);
+        $oauth->fetch($this->build_url(), array(), OAUTH_HTTP_METHOD_GET, array('Accept-language' => $language));
+        $this->_response = $oauth->getLastResponse();
+      }
+      else {
+        // Try to use standalone oauth library if it can be found
+        require_once(dirname(__FILE__).'/oauth/OAuth.php');
+        $consumer = new OAuthConsumer($oauth_config['consumer_key'], $oauth_config['consumer_secret'], NULL);
+        $token = new OAuthConsumer($oauth_config['oauth_token'], $oauth_config['oauth_token_secret']);
+        $acc_req = OAuthRequest::from_consumer_and_token($consumer, $token, "GET", $this->build_url(), array());
+        $acc_req->sign_request(new OAuthSignatureMethod_HMAC_SHA1(), $consumer, $token);
+        $this->_response = $this->fetch($acc_req->to_url(), $this->convert_locale($language));
+      }
     }
     else {
-      $this->_response = $oauth_token;
+      $this->_response = $oauth_config;
     }
     $this->parse();
 	}
@@ -150,13 +162,13 @@ class LinkedInAPIProfile extends LinkedInProfile {
   }
   
   /**
-   * Builds the url with the OAuth token and the fields to retrieve
+   * Builds the url with the fields to retrieve
    */
-  protected function build_url($oauth_token) {
+  protected function build_url() {
     $url = LinkedInAPIProfile::profile_url;
     $fields = implode(',', $this->_fields);
     $fields = '~:('.$fields.')';
-    $url .= $fields.'?oauth_token='.$oauth_token;
+    $url .= $fields;
     return $url;
   }
 	
