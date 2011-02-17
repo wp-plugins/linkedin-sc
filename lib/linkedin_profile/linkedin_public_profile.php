@@ -115,7 +115,6 @@ class LinkedInPublicProfile extends LinkedInProfile {
 		);
 		$context = stream_context_create($opts);
 		$html_string = file_get_contents($profile_url, false, $context);
-		file_put_contents('/tmp/linkedin', $html_string);
 		$this->_response = $html_string;
 		// Import the HTML into DOM before giving it to simpleXML
 		$doc = new DOMDocument('1.0');
