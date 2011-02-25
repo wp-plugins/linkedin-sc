@@ -127,9 +127,6 @@ class LinkedInPublicProfile extends LinkedInProfile {
 				array('p', 'title', 'headline'),
 				array('dd', 'locality', 'location'),
 				array('p', 'null', 'specialties'),
-				//array('p', 'summary', 'summary'),
-				array('p', '', 'interests'),
-				//array('p', " ''", 'honors'),
 				//array('p', 'groups', 'groups')
 			);
 			
@@ -150,6 +147,23 @@ class LinkedInPublicProfile extends LinkedInProfile {
 			// Get profile picture if any
 			foreach($this->_xml->xpath('//img[@class="photo"]') as $photo) {
 				$this->picture_url = $photo['src'];
+			}
+			
+			// Get summary
+			foreach($this->_xml->xpath('//div[@id="profile-summary"]') as $summary) {
+				foreach($summary->xpath('.//div[@class="content"]') as $sum) {
+					$this->summary = $sum->p;
+				}
+			}
+			
+			// Get interests
+			foreach($this->_xml->xpath('//dd[@class="interests"]') as $interest) {
+				$this->interests = $interest->p;
+			}
+			
+			// Get honors
+			foreach($this->_xml->xpath('//dd[@class="honors"]') as $honor) {
+				$this->honors = $honor->p;
 			}
 			
 			// Get positions
