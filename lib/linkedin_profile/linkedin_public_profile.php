@@ -158,6 +158,10 @@ class LinkedInPublicProfile extends LinkedInProfile {
 				$exp = $this->fill_position($experience);
 				$this->positions[] = $exp;
 			}
+			foreach($this->_xml->xpath('//div[@class="position   experience vevent vcard current-position"]') as $experience) {
+				$exp = $this->fill_position($experience);
+				$this->positions[] = $exp;
+			}
 			foreach($this->_xml->xpath('//div[@class="position   experience vevent vcard past-position"]') as $experience) {
 				$exp = $this->fill_position($experience);
 				$this->positions[] = $exp;
