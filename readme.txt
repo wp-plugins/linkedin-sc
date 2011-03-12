@@ -157,6 +157,9 @@ This plugin was sponsored by <a href="http://www.csrjobs.nl">CSRJobs</a>.
 4. A detailed configuration process to use LinkedIn API is available here: http://www.viguierjust.com/en/2011/02/07/using-linkedin-sc-with-linkedin-api/
 
 == Changelog ==
+= 1.1.6 =
+ * Added the parsing of LinkedIn public company profiles
+
 = 1.1.5 =
  * Added a functionality that allows your users to easily display their LinkedIn CV on their profile page. Requires the use of LinkedIn API
  
