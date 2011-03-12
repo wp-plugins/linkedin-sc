@@ -3,8 +3,8 @@ Contributors: guillaumev
 Donate link: http://www.viguierjust.com
 Tags: linkedIn, resume, CV, curriculum, vitae
 Requires at least: 2.7
-Tested up to: 3.1	
-Stable tag: 1.1.5
+Tested up to: 3.1
+Stable tag: 1.1.6
 
 Parses your linkedIn resume and allows you to display it using Shortcodes.
 
@@ -77,6 +77,20 @@ Here is a list of the shortcodes you can use (see http://developer.linkedin.com/
 	<li>[linkedinsc_skill_proficiency_level]: proficiency level of the skill (only available if using LinkedIn API)</li>
 	<li>[linkedinsc_skill_proficiency_name]: name of the proficiency of the skill (only available if using LinkedIn API)</li>
 	<li>[linkedinsc_skill_years_name]: number of years of experience (only available if using LinkedIn API)</li>
+</ul>
+
+NEW: you can also use shortcodes to parse company public profiles:
+<ul>
+	<li>[linkeindsc_company id="1661471"]: main company shortcode, will parse the company located at http://www.linkedin.com/company/1661471</li>
+	<li>[linkedinsc_company_name]: name of the company</li>
+	<li>[linkedinsc_company_logo]: URL of the company's logo as it appears on LinkedIn</li>
+	<li>[linkedinsc_company_description]: description of the company</li>
+	<li>[linkedinsc_company_specialties]: specialties of the company</li>
+	<li>[linkedinsc_company_type]: type of the company</li>
+	<li>[linkedinsc_company_size]: size of the company</li>
+	<li>[linkedinsc_company_website]: URL of the company's website</li>
+	<li>[linkedinsc_company_industry]: industry of the company</li>
+	<li>[linkedinsc_company_founded]: year the company was founded</li>
 </ul>
 
 Here is an example of how you could format your CV using those shortcodes:
