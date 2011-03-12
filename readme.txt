@@ -3,7 +3,7 @@ Contributors: guillaumev
 Donate link: http://www.viguierjust.com
 Tags: linkedIn, resume, CV, curriculum, vitae
 Requires at least: 2.7
-Tested up to: 3.0.5
+Tested up to: 3.1	
 Stable tag: 1.1.5
 
 Parses your linkedIn resume and allows you to display it using Shortcodes.

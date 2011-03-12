@@ -214,14 +214,9 @@ function linkedin_sc_user_profile($user) {
 
 	</table>
 	<?php
-	$roles = get_editable_roles();
-	$show_profile = FALSE;
-	foreach ($roles as $role => $detail) {
-		if (current_user_can($role)) {
-			$show_profile = TRUE;
-		}
-	}
-	if ($show_profile) {
+	$role = array_shift($user->roles);
+	
+	if (get_option('linkedin_sc_roles_'.$role)) {
 	?>
 		<table class="form-table">
 			<tr>
