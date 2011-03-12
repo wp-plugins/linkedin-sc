@@ -4,7 +4,7 @@ Donate link: http://www.viguierjust.com
 Tags: linkedIn, resume, CV, curriculum, vitae
 Requires at least: 2.7
 Tested up to: 3.0.5
-Stable tag: 1.1.4
+Stable tag: 1.1.5
 
 Parses your linkedIn resume and allows you to display it using Shortcodes.
 
@@ -105,13 +105,13 @@ Here is an example of how you could format your CV using those shortcodes:
 &lt;h3&gt;Computer skills&lt;/h3&gt;
 &lt;div style="margin-left: 150px;"&gt;
 [linkedinsc_skills]
-[linkedinsc_skill_name]: [linkedinsc_skill_years_name] années d'expérience
+[linkedinsc_skill_name]: [linkedinsc_skill_years_name] years of experience &lt;br /&gt;
 [/linkedinsc_skills]
 &lt;/div&gt;
 &lt;h3&gt;Languages&lt;/h3&gt;
 &lt;div style="margin-left: 150px;"&gt;
 [linkedinsc_languages]
-[linkedinsc_language_name]: [linkedinsc_language_proficiency_name]
+[linkedinsc_language_name]: [linkedinsc_language_proficiency_name] &lt;br /&gt;
 [/linkedinsc_languages]
 &lt;/div&gt;
 &lt;h3&gt;Certifications&lt;/h3&gt;
@@ -143,7 +143,9 @@ This plugin was sponsored by <a href="http://www.csrjobs.nl">CSRJobs</a>.
 4. A detailed configuration process to use LinkedIn API is available here: http://www.viguierjust.com/en/2011/02/07/using-linkedin-sc-with-linkedin-api/
 
 == Changelog ==
-
+= 1.1.5 =
+ * Added a functionality that allows your users to easily display their LinkedIn CV on their profile page. Requires the use of LinkedIn API
+ 
 = 1.1.4 =
  * Fixed bugs in public profile parsing
 

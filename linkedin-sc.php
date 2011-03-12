@@ -4,7 +4,7 @@
 Plugin Name: LinkedIn SC
 Plugin URI: http://www.viguierjust.com
 Description: Display your LinkedIn CV on one of your Wordpress pages or post using Shortcodes
-Version: 1.1.4
+Version: 1.1.5
 Author: Guillaume Viguier-Just
 Author URI: http://www.viguierjust.com
 Licence: GPL3
@@ -111,12 +111,28 @@ function linkedin_sc_register_settings() {
 	register_setting('linkedin_sc_settings', 'linkedin_sc_date_format');
 	register_setting('linkedin_sc_settings', 'linkedin_sc_api_key');
 	register_setting('linkedin_sc_settings', 'linkedin_sc_secret_key');
+	$roles = get_editable_roles();
+	foreach ($roles as $role => $detail) {
+		register_setting('linkedin_sc_settings', 'linkedin_sc_roles_'.$role);
+	}
+	register_setting('linkedin_sc_settings', 'linkedin_sc_profile_template');
 }
 
 function linkedin_sc_options() {
 	if (!current_user_can('manage_options'))  {
 		wp_die( __('You do not have sufficient permissions to access this page.') );
 	}
+	$roles = get_editable_roles();
+	$role_checkboxes = '';
+	foreach ($roles as $role => $detail) {
+		$name = translate_user_role($detail['name']);
+		$checked = '';
+		if (get_option('linkedin_sc_roles_'.$role)) {
+			$checked = 'checked="checked"';
+		}
+		$role_checkboxes .= '<input type="checkbox" '.$checked.' name="linkedin_sc_roles_'.$role.'" />'.$name.'<br />';
+	}
+	
 ?>
 	<div class="wrap">
 		<h2>LinkedIn SC</h2>
@@ -134,6 +150,14 @@ function linkedin_sc_options() {
 			<tr valign="top">
 				<th scope="row"><?php _e('LinkedIn secret key') ?></th>
 				<td><input type="text" name="linkedin_sc_secret_key" value="<?php echo get_option('linkedin_sc_secret_key') ?>" /></td>
+			</tr>
+			<tr valign="top">
+				<th scope="row"><?php _e('Show LinkedIn profile on the profile page for the following roles') ?></th>
+				<td><?php echo $role_checkboxes; ?></td>
+			</tr>
+			<tr valign="top">
+				<th scope="row"><?php _e('Use the following template to display the LinkedIn CV on the profile page') ?></th>
+				<td><textarea name="linkedin_sc_profile_template" rows="20" cols="80"><?php echo get_option('linkedin_sc_profile_template') ?></textarea></td>
 			</tr>
 		</table>
 		<p class="submit">
@@ -184,12 +208,30 @@ function linkedin_sc_user_profile($user) {
   </script>
 	<table class="form-table">
 		<tr>
-			<th><label>LinkedIn API</label></th>
+			<th><label><?php _e('LinkedIn API') ?></label></th>
 			<td><script type="in/login" data-onAuth="onLinkedInAuth"></script><div id="linkedin_sc_profile"></div></td>
 		</tr>
 
 	</table>
-
+	<?php
+	$roles = get_editable_roles();
+	$show_profile = FALSE;
+	foreach ($roles as $role => $detail) {
+		if (current_user_can($role)) {
+			$show_profile = TRUE;
+		}
+	}
+	if ($show_profile) {
+	?>
+		<table class="form-table">
+			<tr>
+				<th><label><?php _e('LinkedIn Profile') ?></label></th>
+				<td><?php if (linkedin_sc_api_authorized()) { echo do_shortcode(get_option('linkedin_sc_profile_template')); } else { _e('You first need to sign in with LinkedIn and refresh this page before your profile can be displayed'); } ?></td>
+			</tr>
+		</table>
+	<?php
+	}
+	?>
 
 <?php
 }
