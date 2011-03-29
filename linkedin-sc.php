@@ -279,9 +279,15 @@ function linkedin_sc_user_profile($user) {
 
 	</table>
 	<?php
-	$role = array_shift($user->roles);
+	$capabilities = $user->wp_capabilities;
+	$authorize = FALSE;
+	foreach ($capabilities as $role => $capability) {
+		if ($capability == 1 && get_option('linkedin_sc_roles_'.$role)) {
+			$authorize = TRUE;
+		}
+	}
 	
-	if (get_option('linkedin_sc_roles_'.$role)) {
+	if ($authorize) {
 	?>
 		<table class="form-table">
 			<tr>
