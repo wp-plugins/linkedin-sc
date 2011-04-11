@@ -73,16 +73,52 @@ class LinkedInAPIProfile extends LinkedInProfile {
     'skills:(id,skill,proficiency,years)',
     'certifications:(id,name,authority,number,start-date,end-date)',
     'educations',
+    'recommendations-received',
     'picture-url',
+    'phone-numbers',
+    'twitter-accounts',
+    'num-connections',
+    'member-url-resources'
   );
+  
+  /**
+   * Number of connections
+   * @var array
+   */
+  public $num_connections = '';
+  
+  /**
+   * Phone numbers
+   * @var array
+   */
+  public $phone_numbers = array();
+  
+  /**
+   * Twitter accounts
+   * @var array
+   */
+  public $twitter_accounts = array();
+  
+  /**
+   * Recommendations received
+   * @var array()
+   */
+  public $recommendations = array();
+  
+  /**
+   * URL resources
+   * @var array
+   */
+  public $member_url_resources = array();
   
 	/**
 	 * Constructor
 	 * 
    * @param array OAuth 1.0a configuration
-   * @param array List of fields to retrieve
+   * @param string Language
+   * @param string Profile to be retrieved
 	 */
-	public function __construct($oauth_config, $language = 'en', $fields = NULL, $build_from_cache = FALSE) {
+	public function __construct($oauth_config, $language = 'en', $profile = '~', $fields = NULL, $build_from_cache = FALSE) {
     if ($build_from_cache == FALSE) {
       if ($fields != NULL) {
         $this->_fields = $fields;
@@ -91,7 +127,7 @@ class LinkedInAPIProfile extends LinkedInProfile {
         $oauth = new OAuth($oauth_config['consumer_key'], $oauth_config['consumer_secret']);
         $oauth->setToken($oauth_config['oauth_token'], $oauth_config['oauth_token_secret']);
         $language = $this->convert_locale($language);
-        $oauth->fetch($this->build_url(), array(), OAUTH_HTTP_METHOD_GET, array('Accept-language' => $language));
+        $oauth->fetch($this->build_url($profile), array(), OAUTH_HTTP_METHOD_GET, array('Accept-language' => $language));
         $this->_response = $oauth->getLastResponse();
       }
       else {
@@ -99,7 +135,7 @@ class LinkedInAPIProfile extends LinkedInProfile {
         require_once(dirname(__FILE__).'/oauth/OAuth.php');
         $consumer = new OAuthConsumer($oauth_config['consumer_key'], $oauth_config['consumer_secret'], NULL);
         $token = new OAuthConsumer($oauth_config['oauth_token'], $oauth_config['oauth_token_secret']);
-        $acc_req = OAuthRequest::from_consumer_and_token($consumer, $token, "GET", $this->build_url(), array());
+        $acc_req = OAuthRequest::from_consumer_and_token($consumer, $token, "GET", $this->build_url($profile), array());
         $acc_req->sign_request(new OAuthSignatureMethod_HMAC_SHA1(), $consumer, $token);
         $this->_response = $this->fetch($acc_req->to_url(), $this->convert_locale($language));
       }
@@ -164,10 +200,10 @@ class LinkedInAPIProfile extends LinkedInProfile {
   /**
    * Builds the url with the fields to retrieve
    */
-  protected function build_url() {
+  protected function build_url($profile = '~') {
     $url = LinkedInAPIProfile::profile_url;
     $fields = implode(',', $this->_fields);
-    $fields = '~:('.$fields.')';
+    $fields = $profile.':('.$fields.')';
     $url .= $fields;
     return $url;
   }
@@ -191,11 +227,38 @@ class LinkedInAPIProfile extends LinkedInProfile {
     $this->associations = $xml->associations;
     $this->honors = $xml->honors;
     $this->interests = $xml->interests;
+    $this->num_connections = $xml->{'num-connections'};
+    
+    if ($xml->{'member-url-resources'}->{'member-url'}) {
+      foreach ($xml->{'member-url-resources'}->{'member-url'} as $member_url) {
+        $url = new stdClass();
+        $url->url = $member_url->url;
+        $url->name = $member_url->name;
+        $this->member_url_resources[] = $url;
+      }
+    }
+    
+    if ($xml->{'phone-numbers'}->{'phone-number'}) {
+      foreach($xml->{'phone-numbers'}->{'phone-number'} as $phone_number) {
+        $phone_type = (string)$phone_number->{'phone-type'};
+        $number = (string)$phone_number->{'phone-number'};
+        $this->phone_numbers[$phone_type] = $number;
+      }
+    }
+    
+    if ($xml->{'twitter-accounts'}->{'twitter-account'}) {
+      foreach($xml->{'twitter-accounts'}->{'twitter-account'} as $twitter_account) {
+        $account = (string)$twitter_account->{'provider-account-name'};
+        $this->twitter_accounts[] = $account;
+      }
+    }
+    
     
     if ($xml->positions->position) {
       // Positions
       foreach ($xml->positions->position as $position) {
         $exp = new stdClass();
+        $exp->is_current = $position->is_current;
         $exp->title = $position->title;
         $exp->summary = $position->summary;
         $month = $position->{'start-date'}->month;
@@ -299,6 +362,19 @@ class LinkedInAPIProfile extends LinkedInProfile {
         $ed->degree = $education->degree;
         $ed->field_of_study = $education->{'field-of-study'};
         $this->educations[] = $ed;
+      }
+    }
+    
+    if ($xml->{'recommendations-received'}->recommendation) {
+      // Recommendations
+      foreach ($xml->{'recommendations-received'}->recommendation as $recommendation) {
+        $re = new stdClass();
+        $re->type = $recommendation->{'recommendation-type'}->code;
+        $re->text = $recommendation->{'recommendation-text'};
+        $re->recommender = new stdClass();
+        $re->recommender->first_name = $recommendation->recommender->{'first-name'};
+        $re->recommender->last_name = $recommendation->recommender->{'last-name'};
+        $this->recommendations[] = $re;
       }
     }
     
