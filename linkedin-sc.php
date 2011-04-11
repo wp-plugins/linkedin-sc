@@ -58,14 +58,13 @@ function linkedin_sc_handler($atts, $content = null) {
 		require_once(dirname(__FILE__).'/inc/linkedin-sc-skills.php');
 		// We can use linkedin API
 		require_once(dirname(__FILE__).'/lib/linkedin_profile/linkedin_api_profile.php');
-		/*$cache = get_user_meta($post->post_author, 'linkedin_sc_cache', TRUE);
-		if ($cache) {
-			$linkedin_sc_profile = new LinkedInAPIProfile($cache, 'en', NULL, TRUE);
-		}
-		else {*/
-			$oauth_config = linkedin_sc_api_get_config();
+		$oauth_config = linkedin_sc_api_get_config();
+		try {
 			$linkedin_sc_profile = new LinkedInAPIProfile($oauth_config, $atts['lang']);
-		//}
+		}
+		catch (Exception $e) {
+			return __("An error occured: could not parse profile");
+		}
 	}
 	else {
 		require_once(dirname(__FILE__).'/lib/linkedin_profile/linkedin_public_profile.php');
