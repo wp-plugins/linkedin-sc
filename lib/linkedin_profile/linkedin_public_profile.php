@@ -213,7 +213,7 @@ class LinkedInPublicProfile extends LinkedInProfile {
 		foreach($experience->xpath('.//abbr[@class="dtend"]') as $end) {
 			$exp->end_date = $end['title'];
 		}
-		foreach($experience->xpath('.//p[@class=" desc"]') as $description) {
+		foreach($experience->xpath('.//p[@class=" description"]') as $description) {
 			$exp->summary = $this->subXML($description->asXML());
 		}
 		return $exp;
