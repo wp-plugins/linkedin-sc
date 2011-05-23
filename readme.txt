@@ -4,7 +4,7 @@ Donate link: http://www.viguierjust.com
 Tags: linkedIn, resume, CV, curriculum, vitae
 Requires at least: 2.7
 Tested up to: 3.1
-Stable tag: 1.1.8
+Stable tag: 1.1.9
 
 Parses your linkedIn resume and allows you to display it using Shortcodes.
 
@@ -157,6 +157,9 @@ This plugin was sponsored by <a href="http://www.csrjobs.nl">CSRJobs</a>.
 4. A detailed configuration process to use LinkedIn API is available here: http://www.viguierjust.com/en/2011/02/07/using-linkedin-sc-with-linkedin-api/
 
 == Changelog ==
+= 1.1.9 =
+ * Fixed some HTML parsing bugs
+
 = 1.1.8 =
  * Fixed small bugs
 

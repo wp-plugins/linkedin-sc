@@ -4,7 +4,7 @@
 Plugin Name: LinkedIn SC
 Plugin URI: http://www.viguierjust.com
 Description: Display your LinkedIn CV on one of your Wordpress pages or post using Shortcodes
-Version: 1.1.8
+Version: 1.1.9
 Author: Guillaume Viguier-Just
 Author URI: http://www.viguierjust.com
 Licence: GPL3
